@@ -16,7 +16,7 @@ spec:
     spec:
       containers:
       - name: flask-redis
-        image: flask-redis
+        image: flask-redis:1.0.0
         env:
         - name: CELERY_BROKER_URL
           value: 'redis://redis-service:6379/0'
@@ -36,6 +36,7 @@ metadata:
   labels:
     app: flask-redis
 spec:
+  type: LoadBalancer
   ports:
   - port: 5001
     protocol: TCP

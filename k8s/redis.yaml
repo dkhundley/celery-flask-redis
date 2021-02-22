@@ -9,6 +9,7 @@ spec:
   selector:
     matchLabels:
       app: redis
+  serviceName: redis-service
   template:
     metadata:
       labels:
@@ -17,7 +18,7 @@ spec:
       containers:
       - name: redis
         image: redis
-        args: ["--appendonly"]
+        args: ["--appendonly", "yes"]
         ports:
         - containerPort: 6379
         volumeMounts:
