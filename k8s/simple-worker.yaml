@@ -1,0 +1,28 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: redis-simple-worker
+  labels:
+    app: redis-simple-worker
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: redis-simple-worker
+  template:
+    metadata:
+      labels:
+        app: redis-simple-worker
+    spec:
+      containers:
+      - name: redis-simple-worker
+        image: redis-simple-worker
+        env:
+        - name: CELERY_BROKER_URL
+          value: 'redis://redis-service:6379/0'
+        - name: CELERY_RESULT_BACKEND
+          value: 'redis://redis-service:6379/1'
+        resources:
+          requests:
+            cpu: 100m
+            memory: 100Mi

@@ -1,0 +1,44 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: flask-redis
+  labels:
+    app: flask-redis
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: flask-redis
+  template:
+    metadata:
+      labels:
+        app: flask-redis
+    spec:
+      containers:
+      - name: flask-redis
+        image: flask-redis
+        env:
+        - name: CELERY_BROKER_URL
+          value: 'redis://redis-service:6379/0'
+        - name: CELERY_RESULT_BACKEND
+          value: 'redis://redis-service:6379/1'
+        ports:
+        - containerPort: 5001
+        resources:
+          requests:
+            cpu: 100m
+            memory: 100Mi
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: flask-redis-service
+  labels:
+    app: flask-redis
+spec:
+  ports:
+  - port: 5001
+    protocol: TCP
+    targetPort: 5001
+  selector:
+    app: flask-redis
